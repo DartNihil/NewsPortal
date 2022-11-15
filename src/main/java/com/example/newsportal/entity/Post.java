@@ -3,12 +3,10 @@ package com.example.newsportal.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+
 @Entity
 @Table(name = "posts")
-public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Post extends AbstractEntity {
     private String header;
     private String description;
     private String photoOrVideoUrl;
@@ -21,8 +19,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(long id, String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
-        this.id = id;
+    public Post(String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
         this.header = header;
         this.description = description;
         this.photoOrVideoUrl = photoOrVideoUrl;
@@ -31,13 +28,6 @@ public class Post {
         this.likes = likes;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getHeader() {
         return header;
