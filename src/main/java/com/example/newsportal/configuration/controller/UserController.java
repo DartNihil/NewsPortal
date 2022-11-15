@@ -2,6 +2,7 @@ package com.example.newsportal.configuration.controller;
 
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDTO;
+import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,11 @@ public class UserController {
             return ResponseEntity.ok(s);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/profile/posting/add")
+    public ResponseEntity<?> createPost(@RequestBody PostDto postDto){
+        //toDo
     }
 
 }
