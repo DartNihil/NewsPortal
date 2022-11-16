@@ -33,11 +33,11 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
     @PostMapping("/{postId}/{commentId}/addReply")
-    public ResponseEntity<Post> addReply(HttpServletRequest request, @RequestBody CommentReplyDto commentReplyDto) {
+    public ResponseEntity<Post> addCommentReply(HttpServletRequest request, @RequestBody CommentReplyDto commentReplyDto) {
         UserDetails userDetails = (UserDetails) request.getAttribute("userDetails");
         Optional<User> byUsername = userRepository.findByUsername(userDetails.getUsername());
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        Post post = postService.addCommentReply(byUsername.get(), commentReplyDto);
+        return new ResponseEntity<>(post, HttpStatus.CREATED);
     }
 
 }
