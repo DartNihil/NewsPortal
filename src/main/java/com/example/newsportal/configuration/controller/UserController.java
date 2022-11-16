@@ -1,7 +1,7 @@
 package com.example.newsportal.configuration.controller;
 
 import com.example.newsportal.configuration.jwt.JwtProvider;
-import com.example.newsportal.dto.AuthDTO;
+import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class UserController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/authentication")
-    public ResponseEntity<String> login(@RequestBody AuthDTO authDTO) {
+    public ResponseEntity<String> login(@RequestBody AuthDto authDTO) {
         if (userService.exists(authDTO.getChannelName(), authDTO.getPassword())) {
             String s = jwtProvider.generationToken(authDTO.getChannelName());
             return ResponseEntity.ok(s);

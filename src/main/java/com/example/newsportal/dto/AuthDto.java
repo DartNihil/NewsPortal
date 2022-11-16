@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthDTO {
+public class AuthDto {
     private String channelName;
     private String password;
 }

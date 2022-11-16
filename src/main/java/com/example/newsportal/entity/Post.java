@@ -28,6 +28,11 @@ public class Post extends AbstractEntity {
         this.likes = likes;
     }
 
+    public Post(String header, String description, String photoOrVideoUrl) {
+        this.header = header;
+        this.description = description;
+        this.photoOrVideoUrl = photoOrVideoUrl;
+    }
 
     public String getHeader() {
         return header;
