@@ -2,7 +2,9 @@ package com.example.newsportal.service;
 
 import com.example.newsportal.dto.PostCommentDto;
 import com.example.newsportal.dto.PostDto;
+import com.example.newsportal.dto.PostLikeDto;
 import com.example.newsportal.entity.Comment;
+import com.example.newsportal.entity.Like;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.exception.PostNotFoundException;
@@ -34,8 +36,8 @@ public class PostService {
         return post;
     }
 
-    public Post mapPostDto(PostDto postDto) {
-        return postMapper.convertPostDto(postDto);
+    public Post mapPostDto(PostDto postDto , User user) {
+        return postMapper.convertPostDto(postDto , user);
     }
 
     public Post addCommentToPost(User author, PostCommentDto postCommentDto) {
@@ -51,4 +53,17 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
+    public Post addReactionToPost(User author, PostLikeDto postLikeDto) {
+        Like like = new Like(LocalDateTime.now(), author, postLikeDto.isLike());
+        Optional<Post> postById = postRepository.findById(postLikeDto.getPostId());
+        if (postById.isPresent()) {
+            Post post = postById.get();
+            post.getLikes().add(like);
+            post = postRepository.save(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+
 }
