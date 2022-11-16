@@ -24,7 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private UserService userService;
 
     private Authentication getAuthentication(String token) {
-        UserDetails userDetails = userService.loadUserByChannelName(jwtProvider.getLoginFromToken(token));
+        UserDetails userDetails = userService.loadUserByUsername(jwtProvider.getLoginFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
