@@ -11,7 +11,9 @@ public class Post extends AbstractEntity {
     private String description;
     private String photoOrVideoUrl;
     private LocalDateTime creationTime;
-    @ManyToMany
+    @ManyToOne
+    private User author;
+    @OneToMany
     private List<Comment> comments;
     @ManyToMany
     private List<Like> likes;
@@ -19,19 +21,11 @@ public class Post extends AbstractEntity {
     public Post() {
     }
 
-    public Post(String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
+    public Post(String header, String description, String photoOrVideoUrl, User author) {
         this.header = header;
         this.description = description;
         this.photoOrVideoUrl = photoOrVideoUrl;
-        this.creationTime = creationTime;
-        this.comments = comments;
-        this.likes = likes;
-    }
-
-    public Post(String header, String description, String photoOrVideoUrl) {
-        this.header = header;
-        this.description = description;
-        this.photoOrVideoUrl = photoOrVideoUrl;
+        this.author = author;
     }
 
     public String getHeader() {
@@ -64,6 +58,14 @@ public class Post extends AbstractEntity {
 
     public void setCreationTime(LocalDateTime creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public List<Comment> getComments() {

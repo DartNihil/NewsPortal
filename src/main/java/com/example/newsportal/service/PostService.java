@@ -2,6 +2,7 @@ package com.example.newsportal.service;
 
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.entity.Post;
+import com.example.newsportal.entity.User;
 import com.example.newsportal.repository.PostRepository;
 import com.example.newsportal.service.mapper.PostMapper;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class PostService {
         return post;
     }
 
-    public Post mapPostDto(PostDto postDto) {
-        return postMapper.convertPostDto(postDto);
+    public Post mapPostDto(PostDto postDto , User user) {
+        return postMapper.convertPostDto(postDto , user);
     }
 }

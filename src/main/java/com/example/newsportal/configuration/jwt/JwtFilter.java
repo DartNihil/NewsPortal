@@ -1,5 +1,6 @@
 package com.example.newsportal.configuration.jwt;
 
+import com.example.newsportal.entity.User;
 import com.example.newsportal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private UserService userService;
 
     private Authentication getAuthentication(String token) {
-        UserDetails userDetails = userService.loadUserByChannelName(jwtProvider.getLoginFromToken(token));
+        UserDetails userDetails = userService.loadUserByUsername(jwtProvider.getLoginFromToken(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
@@ -34,9 +35,11 @@ public class JwtFilter extends OncePerRequestFilter {
         if (token != null && jwtProvider.validatorToken(token)) {
             Authentication auth = getAuthentication(token);
 
-            //if (auth != null) {
+//            if (auth != null) {
             SecurityContextHolder.getContext().setAuthentication(auth);
-            //  }
+            User user = (User) auth.getDetails();
+            request.setAttribute("userDetails", user);
+//              }
         }
         filterChain.doFilter(request, response);
     }

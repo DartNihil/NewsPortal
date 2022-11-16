@@ -1,9 +1,10 @@
-package com.example.newsportal.configuration.controller;
+package com.example.newsportal.web.controller;
 
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.entity.Post;
+import com.example.newsportal.entity.User;
 import com.example.newsportal.service.PostService;
 import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -37,8 +40,9 @@ public class UserController {
     }
 
     @PostMapping("/profile/posting/add")
-    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto) {
-        Post post = postService.mapPostDto(postDto);
+    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
+        User u = (User) request.getAttribute("userDetails");
+        Post post = postService.mapPostDto(postDto, u);
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
