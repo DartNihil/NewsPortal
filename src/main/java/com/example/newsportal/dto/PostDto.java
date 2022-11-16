@@ -1,7 +1,11 @@
 package com.example.newsportal.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class PostDto {
+    @NotBlank(message = "Field cant be empty!")
     private String header;
+    @NotBlank(message = "Field cant be empty!")
     private String description;
     private String photoOrVideoUrl;
 
