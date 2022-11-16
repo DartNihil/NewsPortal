@@ -1,6 +1,7 @@
 package com.example.newsportal.service;
 
-import com.example.newsportal.dto.CommentDto;
+import com.example.newsportal.dto.CommentReplyDto;
+import com.example.newsportal.dto.PostCommentDto;
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.entity.Comment;
 import com.example.newsportal.entity.Post;
@@ -38,13 +39,29 @@ public class PostService {
         return postMapper.convertPostDto(postDto);
     }
 
-    public Post addCommentToPost(User author, CommentDto commentDto) {
-        Comment comment = new Comment(LocalDateTime.now(), author, commentDto.getText());
-        Optional<Post> postById = postRepository.findById(commentDto.getId());
+    public Post addCommentToPost(User author, PostCommentDto postCommentDto) {
+        Comment comment = new Comment(LocalDateTime.now(), author, postCommentDto.getText());
+        Optional<Post> postById = postRepository.findById(postCommentDto.getPostId());
         if (postById.isPresent()) {
             Post post = postById.get();
             comment = commentRepository.save(comment);
             post.getComments().add(comment);
+            post = postRepository.save(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+    public Post addCommentReply(User author, CommentReplyDto commentReplyDto) {
+        Comment reply = new Comment(LocalDateTime.now(), author, commentReplyDto.getText());
+        Optional<Post> postById = postRepository.findById(commentReplyDto.getPostId());
+        Optional<Comment> commentById = commentRepository.findById(commentReplyDto.getCommentId());
+        if (postById.isPresent() && commentById.isPresent()) {
+            Comment comment = commentById.get();
+            comment.getComments().add(reply);
+            Post post = postById.get();
+            commentRepository.save(reply);
+            commentRepository.save(comment);
             post = postRepository.save(post);
             return post;
         } else {
