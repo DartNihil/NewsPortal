@@ -1,4 +1,4 @@
-package com.example.newsportal.configuration.controller;
+package com.example.newsportal.web.controller;
 
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
