@@ -1,7 +1,7 @@
 package com.example.newsportal.web.controller;
 
-import com.example.newsportal.dto.CommentReplyDto;
 import com.example.newsportal.dto.PostCommentDto;
+import com.example.newsportal.dto.PostWithCommentCountDto;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.repository.UserRepository;
@@ -26,18 +26,11 @@ public class PostController {
     @Autowired
     private PostService postService;
     @PostMapping("/{postId}/addComment")
-    public ResponseEntity<Post> addComment(HttpServletRequest request, @RequestBody PostCommentDto postCommentDto) {
+    public ResponseEntity<PostWithCommentCountDto> addComment(HttpServletRequest request, @RequestBody PostCommentDto postCommentDto) {
         UserDetails userDetails = (UserDetails) request.getAttribute("userDetails");
-        Optional<User> byUsername = userRepository.findByUsername(userDetails.getUsername());
-        Post post = postService.addCommentToPost(byUsername.get(), postCommentDto);
-        return new ResponseEntity<>(post, HttpStatus.CREATED);
+        Optional<User> ByChannelName = userRepository.findByChannelName(userDetails.getUsername());
+        Post post = postService.addCommentToPost(ByChannelName.get(), postCommentDto);
+        PostWithCommentCountDto postWithCommentCountDto = new PostWithCommentCountDto(post, post.getComments().size());
+        return new ResponseEntity<>(postWithCommentCountDto, HttpStatus.CREATED);
     }
-    @PostMapping("/{postId}/{commentId}/addReply")
-    public ResponseEntity<Post> addCommentReply(HttpServletRequest request, @RequestBody CommentReplyDto commentReplyDto) {
-        UserDetails userDetails = (UserDetails) request.getAttribute("userDetails");
-        Optional<User> byUsername = userRepository.findByUsername(userDetails.getUsername());
-        Post post = postService.addCommentReply(byUsername.get(), commentReplyDto);
-        return new ResponseEntity<>(post, HttpStatus.CREATED);
-    }
-
 }
