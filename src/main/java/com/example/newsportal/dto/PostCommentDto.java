@@ -1,7 +1,12 @@
 package com.example.newsportal.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class PostCommentDto {
+    @NotNull
     private long postId;
+    @NotBlank(message = "Field cant be empty!")
     private String text;
 
     public PostCommentDto() {
