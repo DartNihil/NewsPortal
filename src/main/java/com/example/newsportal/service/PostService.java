@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -66,4 +67,21 @@ public class PostService {
         }
     }
 
+    public Post removeReactionToPost(User author, PostLikeDto postLikeDto) {
+        Optional<Post> postById = postRepository.findById(postLikeDto.getPostId());
+        if (postById.isPresent()) {
+            Post post = postById.get();
+            for (Like like:post.getLikes()) {
+                if(like.getAuthor().getChannelName().equals(author.getChannelName())
+                        && like.isLike() == postLikeDto.isLike()) {
+                    post.getLikes().remove(like);
+                    break;
+                }
+            }
+            post = postRepository.save(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
 }
