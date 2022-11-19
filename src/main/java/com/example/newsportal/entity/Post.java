@@ -9,7 +9,7 @@ import java.util.List;
 public class Post extends AbstractEntity {
     private String header;
     private String description;
-    private String photoOrVideoUrl;
+    private String imageUrl;
     private LocalDateTime creationTime;
     @ManyToOne
     private User author;
@@ -21,10 +21,10 @@ public class Post extends AbstractEntity {
     public Post() {
     }
 
-    public Post(String header, String description, String photoOrVideoUrl, User author) {
+    public Post(String header, String description, String imageUrl, User author) {
         this.header = header;
         this.description = description;
-        this.photoOrVideoUrl = photoOrVideoUrl;
+        this.imageUrl = imageUrl;
         this.author = author;
     }
 
@@ -44,12 +44,12 @@ public class Post extends AbstractEntity {
         this.description = description;
     }
 
-    public String getPhotoOrVideoUrl() {
-        return photoOrVideoUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPhotoOrVideoUrl(String photoOrVideoUrl) {
-        this.photoOrVideoUrl = photoOrVideoUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public LocalDateTime getCreationTime() {
