@@ -9,12 +9,9 @@ import com.example.newsportal.service.PostService;
 import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/user")
@@ -40,9 +37,8 @@ public class UserController {
     }
 
     @PostMapping("/profile/posting/add")
-    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
-        User u = (User) request.getAttribute("userDetails");
-        Post post = postService.mapPostDto(postDto, u);
+    public ResponseEntity<Post> createPost(@Valid @RequestBody PostDto postDto, @RequestAttribute(value = "user") User user) {
+        Post post = postService.mapPostDto(postDto, user);
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
