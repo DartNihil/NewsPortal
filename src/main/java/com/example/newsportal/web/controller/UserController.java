@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -43,4 +46,15 @@ public class UserController {
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
 
+    @GetMapping("/{channelName}/posts")
+    public ResponseEntity<List<Post>> channelName(@PathVariable("channelName") String channelName) {
+        Optional<User> user = userService.findUser(channelName);
+        List<Post> posts;
+        if(user.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }else{
+            posts = postService.findPosts(user.get());
+        }
+        return ResponseEntity.ok(posts);
+    }
 }

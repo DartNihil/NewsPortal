@@ -5,10 +5,13 @@ import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.repository.PostRepository;
 import com.example.newsportal.service.mapper.PostMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -27,7 +30,12 @@ public class PostService {
         return post;
     }
 
-    public Post mapPostDto(PostDto postDto , User user) {
-        return postMapper.convertPostDto(postDto , user);
+    public Post mapPostDto(PostDto postDto, User user) {
+        return postMapper.convertPostDto(postDto, user);
+    }
+
+    public List<Post> findPosts(User author) throws UsernameNotFoundException {
+        return postRepository.findByAuthor(author);
     }
 }
+

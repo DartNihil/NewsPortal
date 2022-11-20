@@ -15,6 +15,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    private PostService postService;
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return null;
@@ -29,4 +32,9 @@ public class UserService implements UserDetailsService {
             return false;
         }
     }
+
+    public Optional<User> findUser(String channelName) throws UsernameNotFoundException {
+        return userRepository.findByChannelName(channelName);
+    }
+
 }
