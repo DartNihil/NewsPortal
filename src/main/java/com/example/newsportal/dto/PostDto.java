@@ -9,15 +9,24 @@ public class PostDto {
     private String description;
 
     private String imageUrl;
+    private Long postId;
 
     public PostDto() {
     }
 
-
-    public PostDto(String header, String description, String imageUrl) {
+    public PostDto(String header, String description, String imageUrl, Long postId) {
         this.header = header;
         this.description = description;
         this.imageUrl = imageUrl;
+        this.postId = postId;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Long postId) {
+        this.postId = postId;
     }
 
     public String getHeader() {

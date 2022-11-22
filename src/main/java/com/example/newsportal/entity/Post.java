@@ -26,6 +26,7 @@ public class Post extends AbstractEntity {
         this.description = description;
         this.imageUrl = imageUrl;
         this.author = author;
+    }
 
     public Post(String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
         this.header = header;
