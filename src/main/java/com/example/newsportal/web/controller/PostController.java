@@ -28,6 +28,7 @@ public class PostController {
     private UserRepository userRepository;
     @Autowired
     private PostService postService;
+
     @Autowired
     private PostMapper postMapper;
     @PostMapping("/{postId}/addComment")

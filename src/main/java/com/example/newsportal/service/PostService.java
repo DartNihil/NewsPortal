@@ -13,7 +13,6 @@ import com.example.newsportal.repository.PostRepository;
 import com.example.newsportal.service.mapper.PostMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +36,7 @@ public class PostService {
         return post;
     }
 
+
     public Post mapPostDto(PostDto postDto , User user) {
         return postMapper.convertPostDto(postDto , user);
     }
@@ -54,6 +54,7 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
+
     public Post addReactionToPost(User author, PostLikeDto postLikeDto) {
         Like like = new Like(LocalDateTime.now(), author, postLikeDto.isLike());
         Optional<Post> postById = postRepository.findById(postLikeDto.getPostId());
@@ -84,4 +85,5 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
+
 }

@@ -29,4 +29,3 @@ public class PostMapper {
         return new PostWithReactionsDto(post, likesCount, dislikesCount);
     }
 }
-

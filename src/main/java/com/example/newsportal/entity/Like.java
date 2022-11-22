@@ -1,6 +1,7 @@
 package com.example.newsportal.entity;
 
 import javax.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
