@@ -9,9 +9,8 @@ import java.util.List;
 public class Post extends AbstractEntity {
     private String header;
     private String description;
-    private String photoOrVideoUrl;
+    private String imageUrl;
     private LocalDateTime creationTime;
-
     @ManyToOne
     private User author;
     @OneToMany
@@ -22,6 +21,11 @@ public class Post extends AbstractEntity {
     public Post() {
     }
 
+    public Post(String header, String description, String imageUrl, User author) {
+        this.header = header;
+        this.description = description;
+        this.imageUrl = imageUrl;
+        this.author = author;
 
     public Post(String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
         this.header = header;
@@ -30,12 +34,6 @@ public class Post extends AbstractEntity {
         this.creationTime = creationTime;
         this.comments = comments;
         this.likes = likes;
-    }
-
-    public Post(String header, String description, String photoOrVideoUrl) {
-        this.header = header;
-        this.description = description;
-        this.photoOrVideoUrl = photoOrVideoUrl;
     }
 
     public String getHeader() {
@@ -54,12 +52,12 @@ public class Post extends AbstractEntity {
         this.description = description;
     }
 
-    public String getPhotoOrVideoUrl() {
-        return photoOrVideoUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPhotoOrVideoUrl(String photoOrVideoUrl) {
-        this.photoOrVideoUrl = photoOrVideoUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public LocalDateTime getCreationTime() {
@@ -77,6 +75,7 @@ public class Post extends AbstractEntity {
     public void setAuthor(User author) {
         this.author = author;
     }
+      
     public List<Comment> getComments() {
         return comments;
     }

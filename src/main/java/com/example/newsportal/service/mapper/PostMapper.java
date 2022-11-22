@@ -6,7 +6,6 @@ import com.example.newsportal.entity.Like;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component

@@ -85,5 +85,4 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
-
 }

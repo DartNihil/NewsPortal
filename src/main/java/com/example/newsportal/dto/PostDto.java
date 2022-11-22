@@ -7,15 +7,17 @@ public class PostDto {
     private String header;
     @NotBlank(message = "Field cant be empty!")
     private String description;
-    private String photoOrVideoUrl;
+
+    private String imageUrl;
 
     public PostDto() {
     }
 
-    public PostDto(String header, String description, String photoOrVideoUrl) {
+
+    public PostDto(String header, String description, String imageUrl) {
         this.header = header;
         this.description = description;
-        this.photoOrVideoUrl = photoOrVideoUrl;
+        this.imageUrl = imageUrl;
     }
 
     public String getHeader() {
@@ -34,11 +36,11 @@ public class PostDto {
         this.description = description;
     }
 
-    public String getPhotoOrVideoUrl() {
-        return photoOrVideoUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setPhotoOrVideoUrl(String photoOrVideoUrl) {
-        this.photoOrVideoUrl = photoOrVideoUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
