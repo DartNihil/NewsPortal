@@ -11,6 +11,7 @@ import com.example.newsportal.exception.PostNotFoundException;
 import com.example.newsportal.repository.CommentRepository;
 import com.example.newsportal.repository.PostRepository;
 import com.example.newsportal.service.mapper.PostMapper;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
@@ -36,9 +37,12 @@ public class PostService {
         return post;
     }
 
+    public Post mapPostDto(PostDto postDto, User user) {
+        return postMapper.convertPostDto(postDto, user);
+    }
 
-    public Post mapPostDto(PostDto postDto , User user) {
-        return postMapper.convertPostDto(postDto , user);
+    public List<Post> findPosts(User author) throws UsernameNotFoundException {
+        return postRepository.findByAuthor(author);
     }
 
     public Post addCommentToPost(User author, PostCommentDto postCommentDto) {
@@ -86,3 +90,4 @@ public class PostService {
         }
     }
 }
+
