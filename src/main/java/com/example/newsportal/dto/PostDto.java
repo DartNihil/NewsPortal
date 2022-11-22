@@ -7,10 +7,12 @@ public class PostDto {
     private String header;
     @NotBlank(message = "Field cant be empty!")
     private String description;
+
     private String imageUrl;
 
     public PostDto() {
     }
+
 
     public PostDto(String header, String description, String imageUrl) {
         this.header = header;

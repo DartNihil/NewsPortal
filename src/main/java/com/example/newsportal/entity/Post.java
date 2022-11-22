@@ -26,6 +26,14 @@ public class Post extends AbstractEntity {
         this.description = description;
         this.imageUrl = imageUrl;
         this.author = author;
+
+    public Post(String header, String description, String photoOrVideoUrl, LocalDateTime creationTime, List<Comment> comments, List<Like> likes) {
+        this.header = header;
+        this.description = description;
+        this.photoOrVideoUrl = photoOrVideoUrl;
+        this.creationTime = creationTime;
+        this.comments = comments;
+        this.likes = likes;
     }
 
     public String getHeader() {
@@ -67,7 +75,7 @@ public class Post extends AbstractEntity {
     public void setAuthor(User author) {
         this.author = author;
     }
-
+      
     public List<Comment> getComments() {
         return comments;
     }
