@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class PostMapper {
     public Post convertPostDto(PostDto postDto, User user) {
-        return new Post(postDto.getHeader(), postDto.getDescription(), postDto.getPhotoOrVideoUrl(), user);
+        return new Post(postDto.getHeader(), postDto.getDescription(), postDto.getImageUrl(), user);
     }
 
     public PostWithReactionsDto convertPostToPostWithReactionsDto(Post post) {

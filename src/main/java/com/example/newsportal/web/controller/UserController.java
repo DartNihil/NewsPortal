@@ -10,8 +10,6 @@ import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,7 +45,6 @@ public class UserController {
     public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
         User u = (User) request.getAttribute("userDetails");
         Post post = postService.mapPostDto(postDto, u);
-
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
@@ -56,9 +53,9 @@ public class UserController {
     public ResponseEntity<List<Post>> channelName(@PathVariable("channelName") String channelName) {
         Optional<User> user = userService.findUser(channelName);
         List<Post> posts;
-        if(user.isEmpty()){
+        if (user.isEmpty()) {
             return ResponseEntity.badRequest().build();
-        }else{
+        } else {
             posts = postService.findPosts(user.get());
         }
         return ResponseEntity.ok(posts);
