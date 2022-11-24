@@ -24,6 +24,8 @@ public class Post extends AbstractEntity {
     private List<Comment> comments;
     @ManyToMany
     private List<Like> likes;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     public Post(String header, String description, String imageUrl, User author) {
         this.header = header;
