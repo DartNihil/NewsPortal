@@ -89,5 +89,36 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
-}
 
+    public Optional<Post> findPostById(Long id) {
+        Optional<Post> postById = postRepository.findById(id);
+        if (postById.isPresent()) {
+            return postById;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+
+    public Post updatePost(PostDto postDto) {
+        Optional<Post> postById = findPostById(postDto.getPostId());
+        if (postById.isPresent()) {
+            Post editedPost = postById.get();
+            editedPost.setHeader(postDto.getHeader());
+            editedPost.setDescription(postDto.getDescription());
+            editedPost.setImageUrl(postDto.getImageUrl());
+            postRepository.save(editedPost);
+            return editedPost;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+
+    public void deletePost(Long id) {
+        Optional<Post> postById = findPostById(id);
+        if (postById.isPresent()) {
+            postRepository.delete(postById.get());
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+}
