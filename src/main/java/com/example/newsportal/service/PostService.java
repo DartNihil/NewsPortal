@@ -5,6 +5,7 @@ import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.dto.PostLikeDto;
 import com.example.newsportal.entity.*;
 import com.example.newsportal.exception.PostNotFoundException;
+import com.example.newsportal.repository.CategoryWordsStorage;
 import com.example.newsportal.repository.CommentRepository;
 import com.example.newsportal.repository.PostRepository;
 import com.example.newsportal.service.mapper.PostMapper;
@@ -36,7 +37,7 @@ public class PostService {
 
     public Post composePostInfo(PostDto postDto, User user) {
         Post post = postMapper.convertPostDto(postDto, user);
-        post.setCategory(categoryDefinition(postDto));
+        post.setCategory(defineCategory(postDto));
         return post;
     }
 
@@ -89,8 +90,8 @@ public class PostService {
         }
     }
 
-    private Category categoryDefinition(PostDto postDto) {
-        Map<Category, Integer> categoryRatings = categoryRatings(postDto);
+    private Category defineCategory(PostDto postDto) {
+        Map<Category, Integer> categoryRatings = analyzeCategoryRatings(postDto);
         return categoryRatings
                 .keySet()
                 .stream()
@@ -98,19 +99,19 @@ public class PostService {
                 .orElse(Category.UNDEFINED);
     }
 
-    private List<String> fragmentedText(PostDto postDto) {
+    private List<String> fragmentText(PostDto postDto) {
         List<String> fullText = new ArrayList<>();
         Collections.addAll(fullText, postDto.getHeader().split("[\\W_]+"));
         Collections.addAll(fullText, postDto.getDescription().split("[\\W_]+"));
         return fullText;
     }
 
-    private Map<Category, Integer> categoryRatings(PostDto postDto) {
+    private Map<Category, Integer> analyzeCategoryRatings(PostDto postDto) {
         Map<Category, Integer> wordCountByCategory = new HashMap<>();
         int musicWordsCount = 0;
         int theatreWordsCount = 0;
         int cinemaWordsCount = 0;
-        for (String s : fragmentedText(postDto)) {
+        for (String s : fragmentText(postDto)) {
             for (int j = 0; j < CategoryWordsStorage.categoryWordsSize; j++) {
                 if (j < CategoryWordsStorage.MUSIC.size() && s.equalsIgnoreCase(CategoryWordsStorage.MUSIC.get(j))) {
                     musicWordsCount++;
