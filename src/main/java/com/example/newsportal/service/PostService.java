@@ -87,39 +87,44 @@ public class PostService {
         }
     }
 
-    private void categoryDefinition(PostDto postDto) {
+    public Category categoryDefinition(PostDto postDto) {
+        Map<Category, Integer> categoryRatings = categoryRatings(postDto);
+        return categoryRatings
+                .keySet()
+                .stream()
+                .max(Comparator.comparing(categoryRatings::get))
+                .orElse(Category.UNDEFINED);
+    }
+
+    private List<String> fragmentedText(PostDto postDto) {
         List<String> fullText = new ArrayList<>();
         Collections.addAll(fullText, postDto.getHeader().split("[\\W_]+"));
         Collections.addAll(fullText, postDto.getDescription().split("[\\W_]+"));
+        return fullText;
+    }
 
+    private Map<Category, Integer> categoryRatings(PostDto postDto) {
+        Map<Category, Integer> wordCountByCategory = new HashMap<>();
         int musicWordsCount = 0;
         int theatreWordsCount = 0;
         int cinemaWordsCount = 0;
-
-        for (String s : fullText) {
+        for (String s : fragmentedText(postDto)) {
             for (int j = 0; j < CategoryWordsStorage.categoryWordsSize; j++) {
                 if (j < CategoryWordsStorage.MUSIC.size() && s.equalsIgnoreCase(CategoryWordsStorage.MUSIC.get(j))) {
                     musicWordsCount++;
+                    wordCountByCategory.put(Category.MUSIC, musicWordsCount);
                 }
                 if (j < CategoryWordsStorage.THEATRE.size() && s.equalsIgnoreCase(CategoryWordsStorage.THEATRE.get(j))) {
                     theatreWordsCount++;
+                    wordCountByCategory.put(Category.THEATRE, theatreWordsCount);
                 }
                 if (j < CategoryWordsStorage.CINEMA.size() && s.equalsIgnoreCase(CategoryWordsStorage.CINEMA.get(j))) {
                     cinemaWordsCount++;
+                    wordCountByCategory.put(Category.CINEMA, cinemaWordsCount);
                 }
             }
         }
-
-        Map<Category, Integer> wordCountByCategory = new HashMap<>();
-        wordCountByCategory.put(Category.MUSIC, musicWordsCount);
-        wordCountByCategory.put(Category.THEATRE, theatreWordsCount);
-        wordCountByCategory.put(Category.CINEMA, cinemaWordsCount);
-
-        Category category = wordCountByCategory
-                .keySet()
-                .stream()
-                .max(Comparator.comparing(wordCountByCategory::get))
-                .orElse(Category.UNDEFINED);
+        return wordCountByCategory;
     }
 }
 
