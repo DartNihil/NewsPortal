@@ -114,16 +114,13 @@ public class PostService {
         for (String s : fragmentText(postDto)) {
             for (int j = 0; j < CategoryWordsStorage.categoryWordsSize; j++) {
                 if (j < CategoryWordsStorage.MUSIC.size() && s.equalsIgnoreCase(CategoryWordsStorage.MUSIC.get(j))) {
-                    musicWordsCount++;
-                    wordCountByCategory.put(Category.MUSIC, musicWordsCount);
+                    wordCountByCategory.put(Category.MUSIC, musicWordsCount++);
                 }
                 if (j < CategoryWordsStorage.THEATRE.size() && s.equalsIgnoreCase(CategoryWordsStorage.THEATRE.get(j))) {
-                    theatreWordsCount++;
-                    wordCountByCategory.put(Category.THEATRE, theatreWordsCount);
+                    wordCountByCategory.put(Category.THEATRE, theatreWordsCount++);
                 }
                 if (j < CategoryWordsStorage.CINEMA.size() && s.equalsIgnoreCase(CategoryWordsStorage.CINEMA.get(j))) {
-                    cinemaWordsCount++;
-                    wordCountByCategory.put(Category.CINEMA, cinemaWordsCount);
+                    wordCountByCategory.put(Category.CINEMA, cinemaWordsCount++);
                 }
             }
         }
