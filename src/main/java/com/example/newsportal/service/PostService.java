@@ -34,8 +34,10 @@ public class PostService {
         return post;
     }
 
-    public Post mapPostDto(PostDto postDto, User user) {
-        return postMapper.convertPostDto(postDto, user);
+    public Post composePostInfo(PostDto postDto, User user) {
+        Post post = postMapper.convertPostDto(postDto, user);
+        post.setCategory(categoryDefinition(postDto));
+        return post;
     }
 
     public List<Post> findPosts(User author) throws UsernameNotFoundException {
@@ -87,7 +89,7 @@ public class PostService {
         }
     }
 
-    public Category categoryDefinition(PostDto postDto) {
+    private Category categoryDefinition(PostDto postDto) {
         Map<Category, Integer> categoryRatings = categoryRatings(postDto);
         return categoryRatings
                 .keySet()

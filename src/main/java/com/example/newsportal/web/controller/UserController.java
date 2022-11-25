@@ -3,6 +3,7 @@ package com.example.newsportal.web.controller;
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
+import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.service.PostService;
@@ -44,8 +45,7 @@ public class UserController {
     @PostMapping("/profile/posting/add")
     public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
         User u = (User) request.getAttribute("user");
-        Post post = postService.mapPostDto(postDto, u);
-
+        Post post = postService.composePostInfo(postDto, u);
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
