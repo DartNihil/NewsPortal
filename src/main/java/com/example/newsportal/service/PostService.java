@@ -109,16 +109,16 @@ public class PostService {
                 }
             }
         }
-//        Map<String, Integer> wordCountByCategory = new HashMap<>();
-//        wordCountByCategory.put("Music", musicWordsCount);
-//        wordCountByCategory.put(("Theatre"), theatreWordsCount);
-//        wordCountByCategory.put(("Cinema"), cinemaWordsCount);
+        Map<String, Integer> wordCountByCategory = new HashMap<>();
+        wordCountByCategory.put("Music", musicWordsCount);
+        wordCountByCategory.put(("Theatre"), theatreWordsCount);
+        wordCountByCategory.put(("Cinema"), cinemaWordsCount);
 
-//        String category = wordCountByCategory
-//                .keySet()
-//                .stream()
-//                .max(Comparator.comparing(wordCountByCategory::get))
-//                .orElse("Undefined category");
+        String category = wordCountByCategory
+                .keySet()
+                .stream()
+                .max(Comparator.comparing(wordCountByCategory::get))
+                .orElse("Undefined category");
     }
 }
 
