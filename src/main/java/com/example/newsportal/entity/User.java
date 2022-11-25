@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 @Table(name = "users")
@@ -19,4 +20,6 @@ public class User {
     private String channelName;
     private String email;
     private String password;
+    @Transient
+    private Map<Category, Integer> preferences;
 }
