@@ -3,10 +3,7 @@ package com.example.newsportal.service;
 import com.example.newsportal.dto.PostCommentDto;
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.dto.PostLikeDto;
-import com.example.newsportal.entity.Comment;
-import com.example.newsportal.entity.Like;
-import com.example.newsportal.entity.Post;
-import com.example.newsportal.entity.User;
+import com.example.newsportal.entity.*;
 import com.example.newsportal.exception.PostNotFoundException;
 import com.example.newsportal.repository.CommentRepository;
 import com.example.newsportal.repository.PostRepository;
@@ -14,9 +11,9 @@ import com.example.newsportal.service.mapper.PostMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -76,8 +73,8 @@ public class PostService {
         Optional<Post> postById = postRepository.findById(postLikeDto.getPostId());
         if (postById.isPresent()) {
             Post post = postById.get();
-            for (Like like:post.getLikes()) {
-                if(like.getAuthor().getChannelName().equals(author.getChannelName())
+            for (Like like : post.getLikes()) {
+                if (like.getAuthor().getChannelName().equals(author.getChannelName())
                         && like.isLike() == postLikeDto.isLike()) {
                     post.getLikes().remove(like);
                     break;
@@ -88,6 +85,40 @@ public class PostService {
         } else {
             throw new PostNotFoundException();
         }
+    }
+
+    private void categoryDefinition(PostDto postDto) {
+        List<String> fullText = new ArrayList<>();
+        Collections.addAll(fullText, postDto.getHeader().split("[\\W_]+"));
+        Collections.addAll(fullText, postDto.getDescription().split("[\\W_]+"));
+
+        int musicWordsCount = 0;
+        int theatreWordsCount = 0;
+        int cinemaWordsCount = 0;
+
+        for (String s : fullText) {
+            for (int j = 0; j < CategoryWordsStorage.categoryWordsSize; j++) {
+                if (j < CategoryWordsStorage.MUSIC.size() && s.equalsIgnoreCase(CategoryWordsStorage.MUSIC.get(j))) {
+                    musicWordsCount++;
+                }
+                if (j < CategoryWordsStorage.THEATRE.size() && s.equalsIgnoreCase(CategoryWordsStorage.THEATRE.get(j))) {
+                    theatreWordsCount++;
+                }
+                if (j < CategoryWordsStorage.CINEMA.size() && s.equalsIgnoreCase(CategoryWordsStorage.CINEMA.get(j))) {
+                    cinemaWordsCount++;
+                }
+            }
+        }
+//        Map<String, Integer> wordCountByCategory = new HashMap<>();
+//        wordCountByCategory.put("Music", musicWordsCount);
+//        wordCountByCategory.put(("Theatre"), theatreWordsCount);
+//        wordCountByCategory.put(("Cinema"), cinemaWordsCount);
+
+//        String category = wordCountByCategory
+//                .keySet()
+//                .stream()
+//                .max(Comparator.comparing(wordCountByCategory::get))
+//                .orElse("Undefined category");
     }
 }
 

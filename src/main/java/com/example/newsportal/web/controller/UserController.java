@@ -43,8 +43,9 @@ public class UserController {
 
     @PostMapping("/profile/posting/add")
     public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
-        User u = (User) request.getAttribute("userDetails");
+        User u = (User) request.getAttribute("user");
         Post post = postService.mapPostDto(postDto, u);
+
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
