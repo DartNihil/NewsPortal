@@ -83,4 +83,11 @@ public class UserController {
         List<Post> posts = postService.showPostsForUserDiscover(byChannelName.get());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+    @PostMapping("/saved")
+    public ResponseEntity<List<Post>> showSavedPosts(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+        Optional<User> byChannelName = userService.findUserByChannelName(user.getChannelName());
+        List<Post> savedPosts = byChannelName.get().getSavedPosts();
+        return new ResponseEntity<>(savedPosts, HttpStatus.OK);
+    }
 }
