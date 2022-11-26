@@ -125,14 +125,14 @@ public class PostService {
     public List<Post> showPostsForUserDiscover(User user) {
         Map<Category, Integer> preferences = user.getPreferences();
         List<Category> sortedCategoryPreferences = new ArrayList<>();
-        preferences.entrySet().stream().sorted(Comparator.comparingInt(Map.Entry::getValue))
+        preferences.entrySet().stream().sorted((o1, o2) -> o2.getValue() - o1.getValue())
                 .forEach(categoryIntegerEntry -> sortedCategoryPreferences.add(categoryIntegerEntry.getKey()));
         return getTopPostsOfCategory(sortedCategoryPreferences.get(0));
     }
 
     private List<Post> getTopPostsOfCategory(Category category) {
         List<Post> byCategory = postRepository.findByCategory(category);
-        byCategory.sort(Comparator.comparingInt(Post::getPostRating));
+        byCategory.sort((o1, o2) -> o2.getPostRating() - o1.getPostRating());
         List<Post> top = new ArrayList<>();
         int size;
         if (byCategory.size() > 10) {
