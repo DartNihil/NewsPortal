@@ -51,7 +51,7 @@ public class UserController {
 
     @GetMapping("/{channelName}/posts")
     public ResponseEntity<List<Post>> channelName(@PathVariable("channelName") String channelName) {
-        Optional<User> user = userService.findUser(channelName);
+        Optional<User> user = userService.findUserByChannelName(channelName);
         List<Post> posts;
         if (user.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -73,6 +73,12 @@ public class UserController {
     public ResponseEntity<Post> delete(@PathVariable("postId") Long postId) {
         postService.findPostById(postId);
         postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/discover")
+    public ResponseEntity<List<Post>> showDiscoverPosts() {
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

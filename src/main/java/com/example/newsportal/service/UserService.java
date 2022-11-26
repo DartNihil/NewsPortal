@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public Optional<User> findUser(String channelName) throws UsernameNotFoundException {
+    public Optional<User> findUserByChannelName(String channelName) throws UsernameNotFoundException {
         return userRepository.findByChannelName(channelName);
     }
 

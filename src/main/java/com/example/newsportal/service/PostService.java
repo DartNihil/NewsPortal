@@ -52,6 +52,7 @@ public class PostService {
             Post post = postById.get();
             comment = commentRepository.save(comment);
             post.getComments().add(comment);
+            post.setPostRating(post.getPostRating() + 5);
             post = postRepository.save(post);
             return post;
         } else {
@@ -65,6 +66,7 @@ public class PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.getLikes().add(like);
+            post.setPostRating(post.getPostRating() + 3);
             post = postRepository.save(post);
             return post;
         } else {
@@ -83,6 +85,7 @@ public class PostService {
                     break;
                 }
             }
+            post.setPostRating(post.getPostRating() - 3);
             post = postRepository.save(post);
             return post;
         } else {
@@ -121,4 +124,7 @@ public class PostService {
             throw new PostNotFoundException();
         }
     }
+
+
+
 }
