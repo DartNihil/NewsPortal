@@ -77,8 +77,10 @@ public class UserController {
     }
 
     @PostMapping("/discover")
-    public ResponseEntity<List<Post>> showDiscoverPosts() {
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<Post>> showDiscoverPosts(HttpServletRequest request) {
+        User user = (User) request.getAttribute("user");
+        Optional<User> byChannelName = userService.findUserByChannelName(user.getChannelName());
+        List<Post> posts = postService.showPostsForUserDiscover(byChannelName.get());
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 }
