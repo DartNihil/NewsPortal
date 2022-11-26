@@ -45,6 +45,13 @@ public class PostService {
         return postRepository.findByAuthor(author);
     }
 
+    public Post findPostById(long id) {
+        Optional<Post> byId = postRepository.findById(id);
+        if (byId.isPresent()) {
+            return byId.get();
+        } else throw new PostNotFoundException();
+    }
+
     public Post addCommentToPost(User author, PostCommentDto postCommentDto) {
         Comment comment = new Comment(LocalDateTime.now(), author, postCommentDto.getText());
         Optional<Post> postById = postRepository.findById(postCommentDto.getPostId());

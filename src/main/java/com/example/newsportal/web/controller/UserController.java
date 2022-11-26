@@ -11,12 +11,16 @@ import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -60,5 +64,13 @@ public class UserController {
             posts = postService.findPosts(user.get());
         }
         return ResponseEntity.ok(posts);
+    }
+
+    @GetMapping("/openPost/{postId}")
+    public ResponseEntity<?> openPost(@PathVariable("postId") long id, HttpServletRequest request) {
+        User u = (User) request.getAttribute("user");
+        Post post = postService.findPostById(id);
+        userService.ratePreferences(u, post.getCategory());
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 }
