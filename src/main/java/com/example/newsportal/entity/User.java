@@ -20,6 +20,6 @@ public class User {
     private String channelName;
     private String email;
     private String password;
-    @Transient
+    @ElementCollection
     private Map<Category, Integer> preferences;
 }
