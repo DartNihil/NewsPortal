@@ -74,3 +74,19 @@ public class UserController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 }
+
+    @PutMapping("/profile/posting/{postId}")
+    public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
+                                       @RequestBody PostDto postDto) {
+        postDto.setPostId(postId);
+        Post post = postService.updatePost(postDto);
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/profile/posting/{postId}")
+    public ResponseEntity<Post> delete(@PathVariable("postId") Long postId) {
+        postService.findPostById(postId);
+        postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}
