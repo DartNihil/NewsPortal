@@ -3,6 +3,7 @@ package com.example.newsportal.web.controller;
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
+import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.service.PostService;
@@ -10,12 +11,16 @@ import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -43,8 +48,8 @@ public class UserController {
 
     @PostMapping("/profile/posting/add")
     public ResponseEntity<Post> createPost(@RequestBody PostDto postDto, HttpServletRequest request) {
-        User u = (User) request.getAttribute("userDetails");
-        Post post = postService.mapPostDto(postDto, u);
+        User u = (User) request.getAttribute("user");
+        Post post = postService.composePostInfo(postDto, u);
         Post save = postService.save(post);
         return new ResponseEntity<>(save, HttpStatus.CREATED);
     }
@@ -60,6 +65,15 @@ public class UserController {
         }
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping("/openPost/{postId}")
+    public ResponseEntity<?> openPost(@PathVariable("postId") long id, HttpServletRequest request) {
+        User u = (User) request.getAttribute("user");
+        Post post = postService.findPostById(id);
+        userService.ratePreferences(u, post.getCategory());
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+}
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
