@@ -59,6 +59,7 @@ public class PostService {
             Post post = postById.get();
             comment = commentRepository.save(comment);
             post.getComments().add(comment);
+            post.setPostRating(post.getPostRating() + 5);
             post = postRepository.save(post);
             return post;
         } else {
@@ -72,6 +73,11 @@ public class PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.getLikes().add(like);
+            if(like.isLike()){
+                post.setPostRating(post.getPostRating() + 3);
+            } else {
+                post.setPostRating(post.getPostRating() - 3);
+            }
             post = postRepository.save(post);
             return post;
         } else {
@@ -90,6 +96,7 @@ public class PostService {
                     break;
                 }
             }
+            post.setPostRating(post.getPostRating() - 3);
             post = postRepository.save(post);
             return post;
         } else {
@@ -165,5 +172,29 @@ public class PostService {
         } else {
             throw new PostNotFoundException();
         }
+    }
+
+    public List<Post> showPostsForUserDiscover(User user) {
+        Map<Category, Integer> preferences = user.getPreferences();
+        List<Category> sortedCategoryPreferences = new ArrayList<>();
+        preferences.entrySet().stream().sorted((o1, o2) -> o2.getValue() - o1.getValue())
+                .forEach(categoryIntegerEntry -> sortedCategoryPreferences.add(categoryIntegerEntry.getKey()));
+        return getTopPostsOfCategory(sortedCategoryPreferences.get(0));
+    }
+
+    private List<Post> getTopPostsOfCategory(Category category) {
+        List<Post> byCategory = postRepository.findByCategory(category);
+        byCategory.sort((o1, o2) -> o2.getPostRating() - o1.getPostRating());
+        List<Post> top = new ArrayList<>();
+        int size;
+        if (byCategory.size() > 10) {
+            size = 10;
+        } else {
+            size = byCategory.size();
+        }
+        for (int i = 0; i < size; i++) {
+            top.add(byCategory.get(i));
+        }
+        return top;
     }
 }
