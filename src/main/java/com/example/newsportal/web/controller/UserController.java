@@ -113,4 +113,14 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } else throw new UserNotFoundException();
     }
+
+    @PostMapping("/{channelName}/unsubscribe")
+    public ResponseEntity<?> unsubscribe(@PathVariable("channelName") String channelName, HttpServletRequest request) {
+        User currentUser = (User) request.getAttribute("user");
+        Optional<User> userFromFront = userService.findUserByChannelName(channelName);
+        if (userFromFront.isPresent()) {
+            userService.unsubscribe(currentUser, userFromFront.get());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else throw new UserNotFoundException();
+    }
 }

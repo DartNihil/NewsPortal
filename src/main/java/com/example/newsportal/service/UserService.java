@@ -67,4 +67,11 @@ public class UserService implements UserDetailsService {
         userFromFront.getSubscribers().add(currentUser);
         save(userFromFront);
     }
+
+    public void unsubscribe(User currentUser, User userFromFront) {
+        currentUser.getSubscriptions().remove(userFromFront);
+        save(currentUser);
+        userFromFront.getSubscribers().remove(currentUser);
+        save(userFromFront);
+    }
 }
