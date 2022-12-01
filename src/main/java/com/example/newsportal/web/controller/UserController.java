@@ -3,7 +3,6 @@ package com.example.newsportal.web.controller;
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
-import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.service.PostService;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,7 +71,6 @@ public class UserController {
         userService.ratePreferences(u, post.getCategory());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-}
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
@@ -97,6 +94,7 @@ public class UserController {
         List<Post> posts = postService.showPostsForUserDiscover(byChannelName.get());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
     @PostMapping("/saved")
     public ResponseEntity<List<Post>> showSavedPosts(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
