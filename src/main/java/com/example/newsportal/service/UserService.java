@@ -56,4 +56,15 @@ public class UserService implements UserDetailsService {
             return byId.get();
         } else throw new UserNotFoundException();
     }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public void subscribe(User currentUser, User userFromFront) {
+        currentUser.getSubscriptions().add(userFromFront);
+        save(currentUser);
+        userFromFront.getSubscribers().add(currentUser);
+        save(userFromFront);
+    }
 }

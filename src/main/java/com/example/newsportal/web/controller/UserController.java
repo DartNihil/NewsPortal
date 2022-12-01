@@ -5,6 +5,7 @@ import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
+import com.example.newsportal.exception.UserNotFoundException;
 import com.example.newsportal.service.PostService;
 import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -103,9 +104,13 @@ public class UserController {
         return new ResponseEntity<>(savedPosts, HttpStatus.OK);
     }
 
-    @PostMapping("/subscribe")
-    public ResponseEntity<?> subscribe(long userID, HttpServletRequest request) {
+    @PostMapping("/{channelName}/subscribe")
+    public ResponseEntity<?> subscribe(@PathVariable("channelName") String channelName, HttpServletRequest request) {
         User currentUser = (User) request.getAttribute("user");
-        User userFromFront = userService.findById(userID);
+        Optional<User> userFromFront = userService.findUserByChannelName(channelName);
+        if (userFromFront.isPresent()) {
+            userService.subscribe(currentUser, userFromFront.get());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else throw new UserNotFoundException();
     }
 }
