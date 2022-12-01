@@ -102,4 +102,9 @@ public class UserController {
         List<Post> savedPosts = byChannelName.get().getSavedPosts();
         return new ResponseEntity<>(savedPosts, HttpStatus.OK);
     }
+
+    @PostMapping("/subscribe")
+    public ResponseEntity<?> subscribe(){
+
+    }
 }
