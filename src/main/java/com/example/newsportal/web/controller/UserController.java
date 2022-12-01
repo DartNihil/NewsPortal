@@ -104,7 +104,8 @@ public class UserController {
     }
 
     @PostMapping("/subscribe")
-    public ResponseEntity<?> subscribe(){
-
+    public ResponseEntity<?> subscribe(long userID, HttpServletRequest request) {
+        User currentUser = (User) request.getAttribute("user");
+        User userFromFront = userService.findById(userID);
     }
 }
