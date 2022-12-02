@@ -140,7 +140,17 @@ public class PostService {
         }
         return wordCountByCategory;
     }
-}
+
+    public Post addSavePost(User user, Long postId) {
+        Optional<Post> postById = postRepository.findById(postId);
+        if (postById.isPresent()) {
+            Post post = postById.get();
+            user.getSavedPosts().add(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
 
     public Optional<Post> findPostById(Long id) {
         Optional<Post> postById = postRepository.findById(id);
