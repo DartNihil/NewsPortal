@@ -152,6 +152,17 @@ public class PostService {
         }
     }
 
+    public Post removeSavedPost(User user, Long postId) {
+        Optional<Post> postById = postRepository.findById(postId);
+        if (postById.isPresent()) {
+            Post post = postById.get();
+            user.getSavedPosts().remove(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+
     public Optional<Post> findPostById(Long id) {
         Optional<Post> postById = postRepository.findById(id);
         if (postById.isPresent()) {
