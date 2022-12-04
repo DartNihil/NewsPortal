@@ -103,4 +103,5 @@ public class UserController {
         List<Post> savedPosts = byChannelName.get().getSavedPosts();
         return new ResponseEntity<>(savedPosts, HttpStatus.OK);
     }
+
 }
