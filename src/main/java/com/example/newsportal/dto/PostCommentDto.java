@@ -1,7 +1,10 @@
 package com.example.newsportal.dto;
 
+import com.example.newsportal.entity.User;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 public class PostCommentDto {
     @NotNull
@@ -32,4 +35,5 @@ public class PostCommentDto {
     public void setText(String text) {
         this.text = text;
     }
+
 }
