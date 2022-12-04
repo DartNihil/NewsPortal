@@ -8,6 +8,7 @@ import com.example.newsportal.exception.PostNotFoundException;
 import com.example.newsportal.repository.CategoryWordsStorage;
 import com.example.newsportal.repository.CommentRepository;
 import com.example.newsportal.repository.PostRepository;
+import com.example.newsportal.repository.UserRepository;
 import com.example.newsportal.service.mapper.PostMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -23,10 +24,13 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final PostMapper postMapper;
 
-    public PostService(PostRepository postRepository, PostMapper postMapper, CommentRepository commentRepository) {
+    private final UserRepository userRepository;
+
+    public PostService(PostRepository postRepository, PostMapper postMapper, CommentRepository commentRepository, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.postMapper = postMapper;
         this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     public Post save(Post post) {
@@ -67,13 +71,30 @@ public class PostService {
         }
     }
 
+    public Post addCommentToComment(User user, User author, PostCommentDto postCommentDto) {
+        Comment addComment = new Comment(LocalDateTime.now(), user, postCommentDto.getText());
+        Optional<Post> postById = postRepository.findById(postCommentDto.getPostId());
+        List<Comment> findComment = commentRepository.findByAuthorComment(author,postCommentDto.getPostId());
+        if (postById.isPresent()) {
+            Post post = postById.get();
+            findComment.add(addComment);
+            addComment = commentRepository.save(addComment);
+            post.getComments().add(addComment);
+            post.setPostRating(post.getPostRating() + 5);
+            post = postRepository.save(post);
+            return post;
+        } else {
+            throw new PostNotFoundException();
+        }
+    }
+
     public Post addReactionToPost(User author, PostLikeDto postLikeDto) {
         Like like = new Like(LocalDateTime.now(), author, postLikeDto.isLike());
         Optional<Post> postById = postRepository.findById(postLikeDto.getPostId());
         if (postById.isPresent()) {
             Post post = postById.get();
             post.getLikes().add(like);
-            if(like.isLike()){
+            if (like.isLike()) {
                 post.setPostRating(post.getPostRating() + 3);
             } else {
                 post.setPostRating(post.getPostRating() - 3);
@@ -140,7 +161,6 @@ public class PostService {
         }
         return wordCountByCategory;
     }
-}
 
     public Optional<Post> findPostById(Long id) {
         Optional<Post> postById = postRepository.findById(id);

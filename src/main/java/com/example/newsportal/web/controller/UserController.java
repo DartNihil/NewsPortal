@@ -73,7 +73,6 @@ public class UserController {
         userService.ratePreferences(u, post.getCategory());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-}
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
