@@ -140,7 +140,7 @@ public class PostService {
         }
         return wordCountByCategory;
     }
-}
+
 
     public Optional<Post> findPostById(Long id) {
         Optional<Post> postById = postRepository.findById(id);

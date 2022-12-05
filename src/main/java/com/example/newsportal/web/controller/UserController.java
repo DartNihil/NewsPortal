@@ -3,7 +3,6 @@ package com.example.newsportal.web.controller;
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
-import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
 import com.example.newsportal.service.PostService;
@@ -12,16 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/user")
@@ -41,7 +35,7 @@ public class UserController {
     public ResponseEntity<String> login(@RequestBody AuthDto authDTO) {
         if (userService.exists(authDTO.getChannelName(), authDTO.getPassword())) {
             String s = jwtProvider.generationToken(authDTO.getChannelName());
-            return ResponseEntity.ok(s);
+            return ok(s);
         }
         return ResponseEntity.badRequest().build();
     }
@@ -63,7 +57,7 @@ public class UserController {
         } else {
             posts = postService.findPosts(user.get());
         }
-        return ResponseEntity.ok(posts);
+        return ok(posts);
     }
 
     @GetMapping("/openPost/{postId}")
@@ -73,7 +67,7 @@ public class UserController {
         userService.ratePreferences(u, post.getCategory());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-}
+
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
@@ -85,7 +79,6 @@ public class UserController {
 
     @DeleteMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> delete(@PathVariable("postId") Long postId) {
-        postService.findPostById(postId);
         postService.deletePost(postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -97,11 +90,36 @@ public class UserController {
         List<Post> posts = postService.showPostsForUserDiscover(byChannelName.get());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
     @PostMapping("/saved")
     public ResponseEntity<List<Post>> showSavedPosts(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
         Optional<User> byChannelName = userService.findUserByChannelName(user.getChannelName());
         List<Post> savedPosts = byChannelName.get().getSavedPosts();
         return new ResponseEntity<>(savedPosts, HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<User> save(@RequestBody User user) {
+        User saveUser = userService.save(user);
+        return ok(saveUser);
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<User>> findAll() {
+        List<User> users = userService.findAllUsers();
+        return ok(users);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> findById(@PathVariable("userId") Long userId) {
+        User userById = userService.findUserById(userId);
+        return ok(userById);
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<User> deleteUser(@PathVariable("userId") Long userId) {
+        userService.deleteUser(userId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

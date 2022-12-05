@@ -2,6 +2,7 @@ package com.example.newsportal.service;
 
 import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.User;
+import com.example.newsportal.exception.UserNotFoundException;
 import com.example.newsportal.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -47,5 +49,32 @@ public class UserService implements UserDetailsService {
         preferences.put(category, preferences.get(category) + 1);
         userRepository.save(user);
         return preferences;
+    }
+
+    public User save(User user) {
+        userRepository.save(user);
+        return user;
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User findUserById(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    public void deleteUser(Long id) {
+        Optional<User> userById = userRepository.findById(id);
+        if (userById.isPresent()) {
+            userRepository.delete(userById.get());
+        } else {
+            throw new UserNotFoundException();
+        }
     }
 }
