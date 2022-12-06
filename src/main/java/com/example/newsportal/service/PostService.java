@@ -73,7 +73,7 @@ public class PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.getLikes().add(like);
-            if(like.isLike()){
+            if (like.isLike()) {
                 post.setPostRating(post.getPostRating() + 3);
             } else {
                 post.setPostRating(post.getPostRating() - 3);

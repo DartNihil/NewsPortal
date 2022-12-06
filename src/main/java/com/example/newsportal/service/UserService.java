@@ -2,6 +2,7 @@ package com.example.newsportal.service;
 
 import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.User;
+import com.example.newsportal.exception.UserNotFoundException;
 import com.example.newsportal.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,5 +52,30 @@ public class UserService implements UserDetailsService {
         preferences.put(category, preferences.get(category) + 1);
         userRepository.save(user);
         return preferences;
+    }
+
+    public User findById(long id) {
+        Optional<User> byId = userRepository.findById(id);
+        if (byId.isPresent()) {
+            return byId.get();
+        } else throw new UserNotFoundException();
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
+    public void subscribe(User currentUser, User userFromFront) {
+        currentUser.getSubscriptions().add(userFromFront);
+        save(currentUser);
+        userFromFront.getSubscribers().add(currentUser);
+        save(userFromFront);
+    }
+
+    public void unsubscribe(User currentUser, User userFromFront) {
+        currentUser.getSubscriptions().remove(userFromFront);
+        save(currentUser);
+        userFromFront.getSubscribers().remove(currentUser);
+        save(userFromFront);
     }
 }
