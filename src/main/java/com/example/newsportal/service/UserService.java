@@ -43,6 +43,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByChannelName(channelName);
     }
 
+    public void save(User user) {
+        userRepository.save(user);
+    }
+
     public Map<Category, Integer> ratePreferences(User user, Category category) {
         Map<Category, Integer> preferences = user.getPreferences();
         preferences.put(category, preferences.get(category) + 1);

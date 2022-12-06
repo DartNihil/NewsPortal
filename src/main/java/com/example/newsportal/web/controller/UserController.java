@@ -72,6 +72,22 @@ public class UserController {
         userService.ratePreferences(u, post.getCategory());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
+    
+    @PostMapping("/{postId}/addSavePost")
+    public ResponseEntity<?>  addSavePost(HttpServletRequest request, @PathVariable("postId") Long postId) {
+        User user = (User) request.getAttribute("user");
+        postService.addSavePost(user, postId);
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/{postId}/removeSavedPost")
+    public ResponseEntity<?> removeSavedPost(HttpServletRequest request, @PathVariable("postId") Long postId) {
+        User user = (User) request.getAttribute("user");
+        postService.removeSavedPost(user, postId);
+        userService.save(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
