@@ -3,6 +3,7 @@ package com.example.newsportal.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +22,12 @@ public class User {
     private String password;
     @ElementCollection
     private Map<Category, Integer> preferences;
-
     @ManyToMany
     private List<Post> savedPosts;
+    @ManyToMany
+    private List<User> subscriptions;
+    @ManyToMany
+    private List<User> subscribers;
 
     public User(String channelName, String email, String password) {
         this.channelName = channelName;

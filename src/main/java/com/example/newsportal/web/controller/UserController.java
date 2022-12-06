@@ -3,9 +3,9 @@ package com.example.newsportal.web.controller;
 import com.example.newsportal.configuration.jwt.JwtProvider;
 import com.example.newsportal.dto.AuthDto;
 import com.example.newsportal.dto.PostDto;
-import com.example.newsportal.entity.Category;
 import com.example.newsportal.entity.Post;
 import com.example.newsportal.entity.User;
+import com.example.newsportal.exception.UserNotFoundException;
 import com.example.newsportal.service.PostService;
 import com.example.newsportal.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,7 +72,6 @@ public class UserController {
         userService.ratePreferences(u, post.getCategory());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-}
 
     @PutMapping("/profile/posting/{postId}")
     public ResponseEntity<Post> update(@PathVariable("postId") Long postId,
@@ -97,11 +95,32 @@ public class UserController {
         List<Post> posts = postService.showPostsForUserDiscover(byChannelName.get());
         return new ResponseEntity<>(posts, HttpStatus.OK);
     }
+
     @PostMapping("/saved")
     public ResponseEntity<List<Post>> showSavedPosts(HttpServletRequest request) {
         User user = (User) request.getAttribute("user");
         Optional<User> byChannelName = userService.findUserByChannelName(user.getChannelName());
         List<Post> savedPosts = byChannelName.get().getSavedPosts();
         return new ResponseEntity<>(savedPosts, HttpStatus.OK);
+    }
+
+    @PostMapping("/{channelName}/subscribe")
+    public ResponseEntity<?> subscribe(@PathVariable("channelName") String channelName, HttpServletRequest request) {
+        User currentUser = (User) request.getAttribute("user");
+        Optional<User> userFromFront = userService.findUserByChannelName(channelName);
+        if (userFromFront.isPresent()) {
+            userService.subscribe(currentUser, userFromFront.get());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else throw new UserNotFoundException();
+    }
+
+    @PostMapping("/{channelName}/unsubscribe")
+    public ResponseEntity<?> unsubscribe(@PathVariable("channelName") String channelName, HttpServletRequest request) {
+        User currentUser = (User) request.getAttribute("user");
+        Optional<User> userFromFront = userService.findUserByChannelName(channelName);
+        if (userFromFront.isPresent()) {
+            userService.unsubscribe(currentUser, userFromFront.get());
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        } else throw new UserNotFoundException();
     }
 }

@@ -73,7 +73,7 @@ public class PostService {
         if (postById.isPresent()) {
             Post post = postById.get();
             post.getLikes().add(like);
-            if(like.isLike()){
+            if (like.isLike()) {
                 post.setPostRating(post.getPostRating() + 3);
             } else {
                 post.setPostRating(post.getPostRating() - 3);
@@ -140,7 +140,6 @@ public class PostService {
         }
         return wordCountByCategory;
     }
-}
 
     public Optional<Post> findPostById(Long id) {
         Optional<Post> postById = postRepository.findById(id);
